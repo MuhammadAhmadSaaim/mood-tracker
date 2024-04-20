@@ -1,34 +1,65 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
-  final contorller;
-  final String hintText;
+class AuthTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final IconData prefixIcon;
   final bool obscureText;
+  final Function(bool)? onTogglePasswordVisibility; // Optional function to toggle password visibility
+  final String? Function(String?)? validator; // Custom validation function
+  final TextInputType keyboardType; // Keyboard type for text input
 
-  const MyTextField({
-    super.key,
-    required this.contorller,
-    required this.hintText,
-    required this.obscureText,
-
+  AuthTextField({
+    required this.controller,
+    required this.labelText,
+    required this.prefixIcon,
+    this.obscureText = false,
+    this.onTogglePasswordVisibility,
+    this.validator,
+    this.keyboardType = TextInputType.text, // Default keyboard type is text
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
-        controller: contorller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400)),
-          fillColor: Colors.grey.shade200,
-          filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500]),
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      style: TextStyle(color: Colors.black),
+      keyboardType: keyboardType, // Set the keyboard type
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(prefixIcon, color: Colors.black54),
+        suffixIcon: obscureText
+            ? IconButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onPressed: () {
+            if (onTogglePasswordVisibility != null) {
+              onTogglePasswordVisibility!(false);
+            }
+          },
+            icon: Icon(
+                Icons.remove_red_eye_outlined,
+                color: obscureText ? Colors.grey : Colors.black)
+        )
+            : null,
+        labelStyle: TextStyle(color: Colors.black),
+        iconColor: Colors.grey,
+        border: OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
         ),
       ),
+      validator: validator,
     );
   }
 }

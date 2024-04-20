@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:moodtracker/Screens/Authentication/login_screen.dart';
 import '../main.dart';
 
@@ -20,16 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     startAnimation();
-    Future.delayed(Duration(milliseconds: 2000), (){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>LoginPage()));
+    Future.delayed(Duration(milliseconds: 3000), () {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => LoginPage()));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    mq=MediaQuery.of(context).size;
+    mq = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[300],
       body: Stack(
         children: [
           Positioned(
@@ -45,12 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
                         opacity: animate ? 1 : 0,
                         child: Image.asset('images/appIcon.png',)
                     ),
+                    SizedBox(height: 10,),
                     AnimatedOpacity(
                         duration: Duration(milliseconds: 1100),
                         opacity: animatet1 ? 1 : 0,
                         child: RichText(text: TextSpan(
                           text: "Mood Tracker",
-                          style: TextStyle(color: Colors.white, fontFamily: 'Trinidad', fontSize: 40, letterSpacing: .5),
+                          style: TextStyle(color: Colors.black,
+                              fontFamily: 'Trinidad',
+                              fontSize: 20,
+                              letterSpacing: .5),
                         ),
                         )
                     ),
@@ -63,11 +69,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> startAnimation() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 100));
     setState(() => animate = true);
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 100));
     setState(() => animatet1 = true);
-    await Future.delayed(Duration(milliseconds: 2000));
+    await Future.delayed(Duration(milliseconds: 1000));
   }
 }
 
