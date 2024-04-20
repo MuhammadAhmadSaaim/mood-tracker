@@ -1,119 +1,150 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/login_screen.dart';
 
+import '../../main.dart';
 import '../../widgets/authTextfield.dart';
-import '../../widgets/button.dart';
+import '../../widgets/back_button.dart';
+import '../../widgets/Authbutton.dart';
 
-
-class SignupScreen extends StatelessWidget {
-
+class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final formValidationKey = GlobalKey<FormState>();
+
   //controllers
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
-  //for button
-  void signinUser(){}
+
+  final TextEditingController usernameController = TextEditingController();
+
+  final TextEditingController ageController = TextEditingController();
+
+  void signUpUser() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body:  SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 50,),
-                //logo
-                const Icon(
-                  Icons.app_registration_rounded,
-                  size: 100,
-                ),
-                const SizedBox(height: 10,),
-                //Text
-                Text(
-                  "Create an Account",
-                  style: TextStyle(color: Colors.grey[700],fontSize: 16),
-                ),
-                const SizedBox(height: 25,),
-                //username
-                MyTextField(
-                  contorller: usernameController,
-                  hintText: "Email",
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 10,),
-                //password
-                MyTextField(
-                  contorller: passwordController,
-                  hintText: "Password",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10,),
-                //name
-                MyTextField(
-                  contorller: passwordController,
-                  hintText: "Name",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10,),
-                //age
-                MyTextField(
-                  contorller: passwordController,
-                  hintText: "Age",
-                  obscureText: false,
-                ),
-                const SizedBox(height: 10,),
-                //forget password
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Forget Password?",
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25,),
-                //login button
-                MyButton(ontap: signinUser,btntext: "Sign up"),
-
-                const SizedBox(height: 25,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Form(
+                key: formValidationKey,
+                child: Column(
                   children: [
+                    SizedBox(
+                      height: mq.height * .1,
+                    ),
+                    //logo
+                    const Icon(
+                      Icons.app_registration_rounded,
+                      size: 100,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    //Text
                     Text(
-                      "Already a member?",
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                      ),
+                      "Create an Account",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 16),
                     ),
-                    SizedBox(width: 4,),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    AuthTextField(
+                      controller: usernameController,
+                      labelText: 'Name',
+                      prefixIcon: Icons.email,
+                      obscureText: false,
+                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your username';
+                        }
+                        // Add more custom validation logic as needed
+                        return null; // Return null if validation passes
                       },
-                      child: Text( // Moved the child property here
-                        "Login",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
+                    SizedBox(
+                      height: mq.height * .01,
+                    ),
+                    AuthTextField(
+                      controller: emailController,
+                      labelText: 'Email',
+                      prefixIcon: Icons.email,
+                      obscureText: false,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        // Add more custom validation logic as needed
+                        return null; // Return null if validation passes
+                      },
+                    ),
+                    SizedBox(
+                      height: mq.height * .01,
+                    ),
+                    AuthTextField(
+                      controller: passwordController,
+                      labelText: 'Password',
+                      prefixIcon: Icons.email,
+                      obscureText: false,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        // Add more custom validation logic as needed
+                        return null; // Return null if validation passes
+                      },
+                    ),
+                    SizedBox(
+                      height: mq.height * .01,
+                    ),
+                    AuthTextField(
+                      controller: ageController,
+                      labelText: 'Age',
+                      prefixIcon: Icons.email,
+                      obscureText: false,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your age';
+                        }
+                        // Add more custom validation logic as needed
+                        return null; // Return null if validation passes
+                      },
+                    ),
+                    SizedBox(
+                      height: mq.height * .01,
+                    ),
+                    //username
+
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    //login button
+                    AuthButton(ontap: signUpUser, btntext: "Sign up"),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: customBackButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
