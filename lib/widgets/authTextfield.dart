@@ -29,25 +29,12 @@ class AuthTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: Icon(prefixIcon, color: Colors.black54),
-        suffixIcon: obscureText
-            ? IconButton(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onPressed: () {
-            if (onTogglePasswordVisibility != null) {
-              onTogglePasswordVisibility!(false);
-            }
-          },
-            icon: Icon(
-                Icons.remove_red_eye_outlined,
-                color: obscureText ? Colors.grey : Colors.black)
-        )
-            : null,
+        suffixIcon: null,
         labelStyle: TextStyle(color: Colors.black),
         iconColor: Colors.grey,
         border: OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+          borderSide: BorderSide(color: Colors.pink.shade900),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),

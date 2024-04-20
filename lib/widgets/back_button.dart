@@ -7,11 +7,14 @@ class customBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: Text(
-        "Back",
-        style: TextStyle(color: Colors.pink.shade900),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20),
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(
+          "Back",
+          style: TextStyle(color: Colors.pink.shade900),
+        ),
       ),
     );
   }
