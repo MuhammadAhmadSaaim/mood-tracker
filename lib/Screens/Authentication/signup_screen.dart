@@ -1,58 +1,71 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moodtracker/Screens/Authentication/signup_screen.dart';
+import 'package:moodtracker/Screens/Authentication/login_screen.dart';
 
 import '../../widgets/authTextfield.dart';
 import '../../widgets/button.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key}); // Added `Key` parameter and fixed typo in constructor
 
-  // Controllers
-  final TextEditingController emailController = TextEditingController();
+class SignupScreen extends StatelessWidget {
+
+  SignupScreen({super.key});
+  //controllers
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  // Function for button
-  void signinUser() {}
+  //for button
+  void signinUser(){}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: SafeArea(
+      body:  SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
                 const SizedBox(height: 50,),
-                // Logo
-                const SizedBox(height: 50,),
+                //logo
                 const Icon(
-                  Icons.lock,
+                  Icons.app_registration_rounded,
                   size: 100,
                 ),
-                const SizedBox(height: 50,),
-                // Text
+                const SizedBox(height: 10,),
+                //Text
                 Text(
-                  "Welcome back you've been missed!", // Removed unnecessary escape character
-                  style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                  "Create an Account",
+                  style: TextStyle(color: Colors.grey[700],fontSize: 16),
                 ),
                 const SizedBox(height: 25,),
-                // Username
+                //username
                 MyTextField(
-                  contorller: emailController,
+                  contorller: usernameController,
                   hintText: "Email",
                   obscureText: false,
                 ),
-                const SizedBox(height: 15,),
-                // Password
+
+                const SizedBox(height: 10,),
+                //password
                 MyTextField(
-                  contorller: passwordController, // Corrected typo
+                  contorller: passwordController,
                   hintText: "Password",
                   obscureText: true,
                 ),
                 const SizedBox(height: 10,),
-                // Forget password
+                //name
+                MyTextField(
+                  contorller: passwordController,
+                  hintText: "Name",
+                  obscureText: true,
+                ),
+                const SizedBox(height: 10,),
+                //age
+                MyTextField(
+                  contorller: passwordController,
+                  hintText: "Age",
+                  obscureText: false,
+                ),
+                const SizedBox(height: 10,),
+                //forget password
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -66,14 +79,15 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 25,),
-                // Login button
-                MyButton(ontap: signinUser,btntext: "Sign in",),
+                //login button
+                MyButton(ontap: signinUser,btntext: "Sign up"),
+
                 const SizedBox(height: 25,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Not a member?",
+                      "Already a member?",
                       style: TextStyle(
                         color: Colors.grey[700],
                       ),
@@ -83,11 +97,11 @@ class LoginPage extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SignupScreen()),
+                          MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       },
                       child: Text( // Moved the child property here
-                        "Register Now",
+                        "Login",
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
