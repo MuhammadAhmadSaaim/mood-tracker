@@ -25,7 +25,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final TextEditingController ageController = TextEditingController();
 
-  void signUpUser() {}
+  void signUpUser() {
+    if (formValidationKey.currentState!.validate()) {
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
