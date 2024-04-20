@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:moodtracker/Screens/Authentication/login_screen.dart';
-
+import 'package:moodtracker/Screens/Authentication/firebase_auth_services.dart';
+import 'package:moodtracker/widgets/toast.dart';
 import '../../main.dart';
 import '../../widgets/authTextfield.dart';
 import '../../widgets/back_button.dart';
 import '../../widgets/Authbutton.dart';
+import '../../widgets/custom_loadin_bar.dart';
+import '../temp.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -14,20 +17,46 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  bool isSigning = false;
+
   final formValidationKey = GlobalKey<FormState>();
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   //controllers
-  final TextEditingController emailController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
-  final TextEditingController passwordController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
+    ageController.dispose();
+    super.dispose();
+  }
 
-  final TextEditingController usernameController = TextEditingController();
-
-  final TextEditingController ageController = TextEditingController();
-
-  void signUpUser() {
+  void signUpUser() async {
     if (formValidationKey.currentState!.validate()) {
-      Navigator.of(context).pop();
+      setState(() {
+        isSigning = true;
+      });
+      String name = usernameController.text.trim();
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+      String age = ageController.text.trim();
+      User? user = await _auth.signUpWithEmailPassword(email, password);
+      if (user != null) {
+        setState(() {
+          isSigning = false;
+        });
+        showToast(messege: "Account Successfully Created");
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (_) => temp())); //if created go directly to home screen
+      } else {
+        showToast(messege: 'Some Error Occurred');
+      }
     }
   }
 
@@ -107,6 +136,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
                         }
+                        if (value.length < 6 ) {
+                          return 'Password Must be atleast 6 characters long';
+                        }
                         // Add more custom validation logic as needed
                         return null; // Return null if validation passes
                       },
@@ -137,7 +169,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 25,
                     ),
                     //login button
-                    AuthButton(ontap: signUpUser, btntext: "Sign up"),
+                    isSigning
+                        ? CustomLoadingBar()
+                        : AuthButton(
+                            ontap: signUpUser,
+                            btntext: "Sign in",
+                          ),
                   ],
                 ),
               ),

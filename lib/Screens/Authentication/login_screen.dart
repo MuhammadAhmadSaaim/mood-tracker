@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/forget_pass.dart';
 import 'package:moodtracker/Screens/Authentication/signup_screen.dart';
 import 'package:moodtracker/Screens/temp.dart';
+import 'package:moodtracker/widgets/toast.dart';
 
 import '../../main.dart';
 import '../../widgets/authTextfield.dart';
 import '../../widgets/Authbutton.dart';
+import '../../widgets/custom_loadin_bar.dart';
+import 'firebase_auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -16,30 +20,48 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isSigning = false;
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final formValidationKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
-
-  final TextEditingController passwordController = TextEditingController();
-
-  bool passHidden = true;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    passHidden = true;
   }
 
-  void signInUser() {
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void signInUser() async {
     if (formValidationKey.currentState!.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => temp()),
-      );
+      setState(() {
+        isSigning = true;
+      });
+
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+
+      User? user = await _auth.signInWithEmailPassword(email, password);
+      if (user != null) {
+        setState(() {
+          isSigning = false;
+        });
+        showToast(messege: "User SignIn Successful");
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (_) => temp())); //if created go directly to home screen
+      } else {
+        showToast(messege: "Some Error Occurred");
+      }
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                       controller: emailController,
                       labelText: 'Email',
                       prefixIcon: Icons.email,
-                      keyboardType: TextInputType.emailAddress, // Set keyboard type to email address
+                      keyboardType: TextInputType.emailAddress,
+                      // Set keyboard type to email address
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
@@ -92,7 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                         return null; // Return null if validation passes
                       },
                     ),
-                    SizedBox(height: mq.height*.01,),
+                    SizedBox(
+                      height: mq.height * .01,
+                    ),
                     AuthTextField(
                       controller: passwordController,
                       labelText: 'Password',
@@ -116,8 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ForgetPass()));
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => ForgetPass()));
                           },
                           child: Text(
                             "Forget Password?",
@@ -130,10 +156,12 @@ class _LoginPageState extends State<LoginPage> {
                       height: 25,
                     ),
                     // Login button
-                    AuthButton(
-                      ontap: signInUser,
-                      btntext: "Sign in",
-                    ),
+                    isSigning
+                        ? CustomLoadingBar()
+                        : AuthButton(
+                            ontap: signInUser,
+                            btntext: "Sign in",
+                          ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -145,17 +173,20 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => SignupScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => SignupScreen()),
                             );
                           },
-                            child: Text("Register Now",
-                              style: TextStyle(
-                                color: Colors.pink.shade900,
-                                fontWeight: FontWeight.bold,
-                              ),),
+                          child: Text(
+                            "Register Now",
+                            style: TextStyle(
+                              color: Colors.pink.shade900,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),
