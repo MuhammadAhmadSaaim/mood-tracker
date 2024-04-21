@@ -3,6 +3,8 @@ import 'package:moodtracker/Modals/person.dart';
 import '../Modals/mood.dart';
 import 'package:flutter_emoji/flutter_emoji.dart' as emoji;
 
+import 'home_screen.dart';
+
 class WeeklyMoodList extends StatefulWidget {
   const WeeklyMoodList({Key? key}) : super(key: key);
 

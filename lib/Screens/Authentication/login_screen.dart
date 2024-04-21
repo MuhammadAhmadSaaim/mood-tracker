@@ -10,6 +10,7 @@ import '../../main.dart';
 import '../../widgets/authTextfield.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/custom_loadin_bar.dart';
+import '../switch_screens.dart';
 import 'firebase_auth_services.dart';
 import 'firebase_cloudFirestore.dart';
 
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
         print("Logged in as: ${user.email}");
          getData(user.email);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (_) => HomePage())); //if created go directly to home screen
+            builder: (_) => SwitchScreen(userid: user.email!,))); //if created go directly to home screen
       } else {
         showToast(messege: "Some Error Occurred");
       }
@@ -120,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     SizedBox(
-                      height: mq.height * .01,
+                      height: 10,
                     ),
                     AuthTextField(
                       controller: passwordController,

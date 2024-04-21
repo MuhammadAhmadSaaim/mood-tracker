@@ -2,11 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moodtracker/Modals/person.dart';
 
 class Mood {
-  final String name;
-  final String emoji; // Store emoji as string
+  late final String name;
+  late final String emoji;
 
   Mood({required this.name, required this.emoji});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'emoji': emoji,
+    };
+  }
+
+  factory Mood.fromMap(Map<String, dynamic> map) {
+    return Mood(
+      name: map['name'],
+      emoji: map['emoji'],
+    );
+  }
 }
+
 
 
 class MoodEntry {
@@ -30,6 +45,7 @@ class MoodEntry {
       'timestamp': timestamp.toIso8601String(), // Convert DateTime to string
     };
   }
+
 
   Map<String, dynamic> toJson() {
     return {
