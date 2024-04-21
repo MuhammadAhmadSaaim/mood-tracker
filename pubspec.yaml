@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^4.17.0
   firebase_storage: ^11.7.2
   fluttertoast: ^8.2.5
+  flutter_emoji: ^2.5.1
 
 dev_dependencies:
   flutter_test:

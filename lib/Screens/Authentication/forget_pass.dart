@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moodtracker/Screens/Authentication/login_screen.dart';
 import 'package:moodtracker/widgets/back_button.dart';
 import 'package:moodtracker/widgets/toast.dart';
 import '../../widgets/Authbutton.dart';
@@ -22,10 +23,10 @@ class _ForgetPassState extends State<ForgetPass> {
         email: emailController.text.trim(),
       );
       showToast(messege: "Password reset email sent successfully");
-      // You can show a message to the user indicating that the email has been sent
-      Navigator.of(context).pop;
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>LoginPage()));
     } catch (e) {
-      // Handle errors such as invalid email, user not found, etc.
+      
       showToast(messege: "Error sending password reset email: $e");
       // You can show an error message to the user
     }
