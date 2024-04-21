@@ -61,24 +61,30 @@ Future<List<MoodEntry>> getMoodEntriesPastWeek(String userEmail) async {
   final DateTime currentTime = DateTime.now();
   final DateTime oneWeekAgo = currentTime.subtract(const Duration(days: 7));
 
-  final DocumentSnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+  final DocumentSnapshot<Map<String, dynamic>>? querySnapshot = await FirebaseFirestore.instance
       .collection('mood_entries')
       .doc(userEmail)
       .get();
 
   final List<MoodEntry> moodEntries = [];
 
-  querySnapshot.data()!['mood_entries_list'].forEach((entry) {
-    DateTime entryTimestamp = DateTime.parse(entry['timestamp']);
-    if (entryTimestamp.isAfter(oneWeekAgo) && entryTimestamp.isBefore(currentTime)) {
-      moodEntries.add(MoodEntry(
-        mood: entry['mood'],
-        emoji: entry['emoji'],
-        reason: entry['reason'],
-        timestamp: entryTimestamp,
-      ));
+  if (querySnapshot != null && querySnapshot.exists) {
+    final List<dynamic>? entries = querySnapshot.data()?['mood_entries_list'];
+
+    if (entries != null) {
+      entries.forEach((entry) {
+        DateTime entryTimestamp = DateTime.parse(entry['timestamp']);
+        if (entryTimestamp.isAfter(oneWeekAgo) && entryTimestamp.isBefore(currentTime)) {
+          moodEntries.add(MoodEntry(
+            mood: entry['mood'],
+            emoji: entry['emoji'],
+            reason: entry['reason'],
+            timestamp: entryTimestamp,
+          ));
+        }
+      });
     }
-  });
+  }
 
   return moodEntries;
 }
@@ -88,26 +94,30 @@ Future<List<MoodEntry>> getMoodEntriesPastMonth(String userEmail) async {
   final DateTime currentTime = DateTime.now();
   final DateTime oneMonthAgo = currentTime.subtract(const Duration(days: 30));
 
-  final DocumentSnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+  final DocumentSnapshot<Map<String, dynamic>>? querySnapshot = await FirebaseFirestore.instance
       .collection('mood_entries')
       .doc(userEmail)
       .get();
 
   final List<MoodEntry> moodEntries = [];
 
-  querySnapshot.data()!['mood_entries_list'].forEach((entry) {
-    DateTime entryTimestamp = DateTime.parse(entry['timestamp']);
-    if (entryTimestamp.isAfter(oneMonthAgo) && entryTimestamp.isBefore(currentTime)) {
-      moodEntries.add(MoodEntry(
-        mood: entry['mood'],
-        emoji: entry['emoji'],
-        reason: entry['reason'],
-        timestamp: entryTimestamp,
-      ));
+  if (querySnapshot != null && querySnapshot.exists) {
+    final List<dynamic>? entries = querySnapshot.data()?['mood_entries_list'];
+
+    if (entries != null) {
+      entries.forEach((entry) {
+        DateTime entryTimestamp = DateTime.parse(entry['timestamp']);
+        if (entryTimestamp.isAfter(oneMonthAgo) && entryTimestamp.isBefore(currentTime)) {
+          moodEntries.add(MoodEntry(
+            mood: entry['mood'],
+            emoji: entry['emoji'],
+            reason: entry['reason'],
+            timestamp: entryTimestamp,
+          ));
+        }
+      });
     }
-  });
+  }
 
   return moodEntries;
 }
-
-
