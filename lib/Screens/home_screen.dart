@@ -214,6 +214,11 @@ class _HomePageState extends State<HomePage> {
           .then((_) => showToast(messege: "Mood entry added successfully"))
           .catchError(
               (error) => showToast(messege: "Error adding mood entry: $error"));
+
+      setState(() {
+        selectedMood = '';
+        reason = '';
+      });
     } else {
       // Handle case where either mood or reason is empty
       showToast(messege: 'Mood or reason is empty');
