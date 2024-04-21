@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         opacity: animatet1 ? 1 : 0,
                         child: RichText(
                           text: TextSpan(
-                            text: "Mood Tracker",
+                            text: "Stujourn",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Trinidad',
