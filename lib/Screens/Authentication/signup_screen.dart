@@ -58,7 +58,6 @@ class _SignupScreenState extends State<SignupScreen> {
         Person person = Person(
           name: name,
           email: email,
-          password: password,
           age: age,
         );
         currPerson=person;
