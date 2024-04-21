@@ -55,13 +55,13 @@ class _SignupScreenState extends State<SignupScreen> {
       });
       if (user != null) {
         showToast(messege: "Account Successfully Created");
-
         Person person = Person(
           name: name,
           email: email,
           password: password,
           age: age,
         );
+        currPerson=person;
         final db = FirebaseFirestore.instance;
         db
             .collection('users')

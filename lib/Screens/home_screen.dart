@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome to the Mood Tracker!",
+                "Welcome, ${currPerson.name.toUpperCase()}",
                 style: TextStyle(fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
