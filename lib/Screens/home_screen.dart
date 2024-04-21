@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_emoji/flutter_emoji.dart' as emoji;
+import 'package:moodtracker/Screens/monthly_report.dart';
+import 'package:moodtracker/Screens/weekly_report.dart';
+import 'package:moodtracker/widgets/toast.dart';
+import '../Modals/mood.dart';
 import '../Modals/person.dart';
-import '../main.dart';
 import 'Authentication/login_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,38 +16,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController reasonController = TextEditingController();
-  List<String> feelingsList = [
-    "Happiness",
-    "Sadness",
-    "Anger",
-    "Fear",
-    "Surprise",
-    "Disgust",
-    "Excitement",
-    "Love",
-    "Confusion",
-    "Calmness",
-    "Guilt",
-    "Shame",
-    "Loneliness",
-    "Hope",
-    "Pride",
-  ]; // List of feelings
+  String selectedMood = '';
+  String reason = '';
 
-  String selectedFeeling = "Happiness"; // Default selected feeling
+  List<Mood> moods = [
+    Mood(name: 'Happiness/Joy', emoji: 'smile'),
+    Mood(name: 'Sadness', emoji: 'cry'),
+    Mood(name: 'Anger', emoji: 'angry'),
+    Mood(name: 'Fear', emoji: 'fearful'),
+    Mood(name: 'Surprise', emoji: 'surprised'),
+    Mood(name: 'Disgust', emoji: 'disappointed'),
+    Mood(name: 'Excitement', emoji: 'grin'),
+    Mood(name: 'Love/Affection', emoji: 'heart_eyes'),
+    Mood(name: 'Confusion', emoji: 'confused'),
+    Mood(name: 'Calmness', emoji: 'relaxed'),
+    Mood(name: 'Guilt', emoji: 'weary'),
+    Mood(name: 'Shame', emoji: 'sob'),
+    Mood(name: 'Loneliness', emoji: 'pensive'),
+    Mood(name: 'Hope', emoji: 'pray'),
+    Mood(name: 'Pride', emoji: 'grinning'),
+  ];
+
+  void saveFeeling() async {
+    if (selectedMood.isNotEmpty && reason.isNotEmpty) {
+      // Fetch the emoji corresponding to the selected mood
+      String selectedEmoji =
+          moods.firstWhere((mood) => mood.name == selectedMood).emoji;
+
+      // Create a mood entry object
+      MoodEntry moodEntry =
+          MoodEntry(mood: selectedMood, emoji: selectedEmoji, reason: reason);
+
+      final db = FirebaseFirestore.instance;
+      final moodEntryData = moodEntry.toJson();
+
+      db
+          .collection('mood_entries')
+          .doc(currPerson.email)
+          .update({
+            'mood_entries_list': FieldValue.arrayUnion([moodEntryData])
+          })
+          .then((_) => showToast(messege: "Mood entry added successfully"))
+          .catchError(
+              (error) => showToast(messege: "Error adding mood entry: $error"));
+    } else {
+      // Handle case where either mood or reason is empty
+      showToast(messege: 'Mood or reason is empty');
+    }
+  }
 
   @override
   void initState() {
-    print(currPerson);
+    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery
-        .of(context)
-        .size;
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -52,143 +82,111 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.grey[300],
           automaticallyImplyLeading: false,
           actions: [
-            IconButton(onPressed: (){
-              FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => LoginPage()));
-            }, icon: Icon(Icons.logout_rounded), color: Colors.black,)
+            IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => LoginPage()));
+              },
+              icon: Icon(Icons.logout_rounded),
+              color: Colors.black,
+            )
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Welcome, ${currPerson.name.toUpperCase()}",
-                style: TextStyle(fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "How is your mood today?",
-                style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 50),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton<String>(
-                      value: selectedFeeling,
-                      items: feelingsList.map((String feeling) {
-                        return DropdownMenuItem<String>(
-                          value: feeling,
-                          child: Text(feeling),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedFeeling = newValue ?? selectedFeeling;
-                        });
-                      },
-                      style: TextStyle(color: Colors.black),
-                      dropdownColor: Colors.grey[300],
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add, color: Colors.black),
-                    onPressed: () => _showAddFeelingDialog(context),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: reasonController,
-                decoration: InputDecoration(
-                  labelText: "Reason for this mood",
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                ),
-                style: TextStyle(color: Colors.black),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Save feeling logic (not implemented)
-                },
-                child: Text("Save Feeling"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showAddFeelingDialog(BuildContext context) {
-    final TextEditingController feelingNameController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Center(child: Text("Add New Feeling")),
-          content: SizedBox(
-            width: 450,
-            height: 130,
+          padding: EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
-                  controller: feelingNameController,
+                Text(
+                  "Welcome, ${currPerson.name.toUpperCase()}",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(height: 50),
+                Text(
+                  'How are you feeling?',
+                  style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey), // Add border color
+                    borderRadius: BorderRadius.circular(8.0), // Add border radius
+                  ),
+                  child: DropdownButton<String>(
+                    value: selectedMood.isEmpty ? null : selectedMood,
+                    hint: Text('Select a mood'),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedMood = newValue!;
+                      });
+                    },
+                    underline: Container(),
+                    items: moods.map<DropdownMenuItem<String>>((Mood mood) {
+                      return DropdownMenuItem<String>(
+                        value: mood.name,
+                        child: Row(
+                          children: [
+                            Text(
+                              emoji.EmojiParser().get(mood.emoji).code,
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            SizedBox(width: 8.0),
+                            Text(mood.name),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Reason for this mood:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    reason = value;
+                  },
+                  maxLines: 3,
                   decoration: InputDecoration(
-                    labelText: "Feeling Name",
+                    hintText: 'Write your reason here...',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Icon(Icons.emoji_emotions, color: Colors.black),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: saveFeeling,
+                  child: Text('Save Feeling'),
+                ),
+                ElevatedButton(
                   onPressed: () {
-                    // Emoji selection logic (not implemented)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WeeklyMoodList()));
                   },
+                  child: Text('Weekly'),
+                ),
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MonthlyMoodList()));
+                  },
+                  child: Text('Monthly'),
                 ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final newFeeling = feelingNameController.text;
-                setState(() {
-                  feelingsList.add(newFeeling);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text("Add"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.grey[300],
-              ),
-            ),
-          ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
