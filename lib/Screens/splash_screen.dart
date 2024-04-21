@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           'images/appIcon.png',
                         )),
                     SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
                     AnimatedOpacity(
                         duration: Duration(milliseconds: 1100),
