@@ -199,20 +199,28 @@ class _HomePageState extends State<HomePage> {
 
       // Create a mood entry object
       MoodEntry moodEntry =
-          MoodEntry(mood: selectedMood, emoji: selectedEmoji, reason: reason);
+      MoodEntry(mood: selectedMood, emoji: selectedEmoji, reason: reason);
 
       final db = FirebaseFirestore.instance;
       final moodEntryData = moodEntry.toJson();
 
-      db
-          .collection('mood_entries')
-          .doc(currPerson.email)
+      final moodEntryRef = db.collection('mood_entries').doc(currPerson.email);
+
+      // Check if the 'mood_entries' document exists
+      final moodEntryDoc = await moodEntryRef.get();
+      if (!moodEntryDoc.exists) {
+        // If it doesn't exist, create it
+        await moodEntryRef.set({'mood_entries_list': []});
+      }
+
+      // Update the mood_entries_list field by adding the new mood entry
+      moodEntryRef
           .update({
-            'mood_entries_list': FieldValue.arrayUnion([moodEntryData])
-          })
+        'mood_entries_list': FieldValue.arrayUnion([moodEntryData])
+      })
           .then((_) => showToast(messege: "Mood entry added successfully"))
-          .catchError(
-              (error) => showToast(messege: "Error adding mood entry: $error"));
+          .catchError((error) =>
+          showToast(messege: "Error adding mood entry: $error"));
 
       setState(() {
         selectedMood = '';
@@ -223,6 +231,7 @@ class _HomePageState extends State<HomePage> {
       showToast(messege: 'Mood or reason is empty');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
