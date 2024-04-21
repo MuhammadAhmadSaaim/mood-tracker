@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/firebase_cloudFirestore.dart';
 import 'package:moodtracker/Screens/Authentication/login_screen.dart';
-import 'package:moodtracker/Screens/home_screen.dart';
 import 'package:moodtracker/Screens/switch_screens.dart';
 import '../main.dart';
-import '../widgets/toast.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

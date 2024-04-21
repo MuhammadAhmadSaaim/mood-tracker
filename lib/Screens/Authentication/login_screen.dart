@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/forget_pass.dart';
 import 'package:moodtracker/Screens/Authentication/signup_screen.dart';
-import 'package:moodtracker/Screens/home_screen.dart';
 import 'package:moodtracker/widgets/toast.dart';
 
 import '../../main.dart';

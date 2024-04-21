@@ -24,9 +24,9 @@ class Person {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['age'] = this.age;
+    data['name'] = name;
+    data['email'] = email;
+    data['age'] = age;
     return data;
   }
 }

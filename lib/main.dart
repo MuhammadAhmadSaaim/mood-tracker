@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:moodtracker/Screens/home_screen.dart';
 import 'package:moodtracker/Screens/splash_screen.dart';
 import 'firebase_options.dart';
 

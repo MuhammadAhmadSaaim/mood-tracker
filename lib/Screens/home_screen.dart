@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   void fetchMoods() async {
     try {
       final QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection('moods').get();
+          await FirebaseFirestore.instance.collection('moods').get();
 
       final List<Mood> fetchedMoods = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -180,8 +180,7 @@ class _HomePageState extends State<HomePage> {
                   });
                   Navigator.of(context).pop();
                 } else {
-                  showToast(
-                      messege: 'Please provide both mood name and emoji');
+                  showToast(messege: 'Please provide both mood name and emoji');
                 }
               },
               child: Text('Add'),
@@ -238,9 +237,9 @@ class _HomePageState extends State<HomePage> {
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Mood Tracker"),
+          title: Text("Mood Tracker", style: TextStyle(color: Colors.white)),
           centerTitle: true,
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Colors.black,
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -249,7 +248,10 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (_) => LoginPage()));
               },
-              icon: Icon(Icons.logout_rounded),
+              icon: Icon(
+                Icons.logout_rounded,
+                color: Colors.white,
+              ),
               color: Colors.black,
             )
           ],
@@ -257,6 +259,7 @@ class _HomePageState extends State<HomePage> {
         body: Padding(
           padding: EdgeInsets.all(20.0),
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -293,7 +296,8 @@ class _HomePageState extends State<HomePage> {
                               });
                             },
                             underline: Container(),
-                            items: moods.map<DropdownMenuItem<String>>((Mood mood) {
+                            items: moods
+                                .map<DropdownMenuItem<String>>((Mood mood) {
                               return DropdownMenuItem<String>(
                                 value: mood.name,
                                 child: Row(

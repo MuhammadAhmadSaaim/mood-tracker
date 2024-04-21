@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:moodtracker/Modals/person.dart';
 
 class Mood {
   late final String name;
@@ -60,7 +59,7 @@ class MoodEntry {
 // Function to get mood entries from current time to past one week
 Future<List<MoodEntry>> getMoodEntriesPastWeek(String userEmail) async {
   final DateTime currentTime = DateTime.now();
-  final DateTime oneWeekAgo = currentTime.subtract(Duration(days: 7));
+  final DateTime oneWeekAgo = currentTime.subtract(const Duration(days: 7));
 
   final DocumentSnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
       .collection('mood_entries')
@@ -87,7 +86,7 @@ Future<List<MoodEntry>> getMoodEntriesPastWeek(String userEmail) async {
 // Function to get mood entries from current time to past one month
 Future<List<MoodEntry>> getMoodEntriesPastMonth(String userEmail) async {
   final DateTime currentTime = DateTime.now();
-  final DateTime oneMonthAgo = currentTime.subtract(Duration(days: 30));
+  final DateTime oneMonthAgo = currentTime.subtract(const Duration(days: 30));
 
   final DocumentSnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
       .collection('mood_entries')
@@ -110,3 +109,5 @@ Future<List<MoodEntry>> getMoodEntriesPastMonth(String userEmail) async {
 
   return moodEntries;
 }
+
+
