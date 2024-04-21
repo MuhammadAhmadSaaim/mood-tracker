@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/forget_pass.dart';
 import 'package:moodtracker/Screens/Authentication/signup_screen.dart';
-import 'package:moodtracker/Screens/temp.dart';
+import 'package:moodtracker/Screens/home_screen.dart';
 import 'package:moodtracker/widgets/toast.dart';
 
 import '../../main.dart';
@@ -11,6 +11,7 @@ import '../../widgets/authTextfield.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/custom_loadin_bar.dart';
 import 'firebase_auth_services.dart';
+import 'firebase_cloudFirestore.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -50,13 +51,16 @@ class _LoginPageState extends State<LoginPage> {
       String password = passwordController.text.trim();
 
       User? user = await _auth.signInWithEmailPassword(email, password);
+      setState(() {
+        isSigning = false;
+      });
       if (user != null) {
-        setState(() {
-          isSigning = false;
-        });
-        showToast(messege: "User SignIn Successful");
+
+        showToast(messege: "User Successfully SignedIn");
+        print("Logged in as: ${user.email}");
+         getData(user.email);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (_) => temp())); //if created go directly to home screen
+            builder: (_) => HomePage())); //if created go directly to home screen
       } else {
         showToast(messege: "Some Error Occurred");
       }

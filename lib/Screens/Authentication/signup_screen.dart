@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moodtracker/Screens/Authentication/firebase_auth_services.dart';
 import 'package:moodtracker/widgets/toast.dart';
+import '../../Modals/person.dart';
 import '../../main.dart';
 import '../../widgets/authTextfield.dart';
 import '../../widgets/back_button.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/custom_loadin_bar.dart';
-import '../temp.dart';
+import '../home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -47,13 +49,28 @@ class _SignupScreenState extends State<SignupScreen> {
       String password = passwordController.text.trim();
       String age = ageController.text.trim();
       User? user = await _auth.signUpWithEmailPassword(email, password);
+
+      setState(() {
+        isSigning = false;
+      });
       if (user != null) {
-        setState(() {
-          isSigning = false;
-        });
         showToast(messege: "Account Successfully Created");
+
+        Person person = Person(
+          name: name,
+          email: email,
+          password: password,
+          age: age,
+        );
+        final db = FirebaseFirestore.instance;
+        db
+            .collection('users')
+            .doc(person.email)
+            .set(person.toJson())
+            .onError((error, stackTrace) => print("Error writing document $error"));
+
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (_) => temp())); //if created go directly to home screen
+            builder: (_) => HomePage())); //if created go directly to home screen
       } else {
         showToast(messege: 'Some Error Occurred');
       }
