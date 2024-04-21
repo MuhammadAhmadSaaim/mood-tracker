@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:moodtracker/Screens/Authentication/firebase_cloudFirestore.dart';
 import 'package:moodtracker/Screens/Authentication/login_screen.dart';
 import 'package:moodtracker/Screens/home_screen.dart';
+import 'package:moodtracker/Screens/switch_screens.dart';
 import '../main.dart';
 import '../widgets/toast.dart';
 
@@ -85,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print("Logged in as: ${user.email}");
         getData(user.email);
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+            context, MaterialPageRoute(builder: (context) => SwitchScreen(userid: user.email!)));
       } else {
         print("no user signed in");
         Navigator.pushReplacement(

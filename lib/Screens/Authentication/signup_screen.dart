@@ -10,6 +10,7 @@ import '../../widgets/back_button.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/custom_loadin_bar.dart';
 import '../home_screen.dart';
+import '../switch_screens.dart';
 
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key});
@@ -69,7 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
             .onError((error, stackTrace) => print("Error writing document $error"));
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (_) => HomePage())); //if created go directly to home screen
+            builder: (_) => SwitchScreen(userid: user.email!,))); // //if created go directly to home screen
       } else {
         showToast(messege: 'Some Error Occurred');
       }
