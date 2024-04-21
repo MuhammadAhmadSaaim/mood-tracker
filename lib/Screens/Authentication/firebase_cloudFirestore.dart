@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../../Modals/mood.dart';
 import '../../Modals/person.dart';
 
 Future<void> getData(String? userid) async {

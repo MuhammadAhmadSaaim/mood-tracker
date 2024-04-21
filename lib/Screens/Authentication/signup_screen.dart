@@ -9,7 +9,6 @@ import '../../widgets/authTextfield.dart';
 import '../../widgets/back_button.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/custom_loadin_bar.dart';
-import '../home_screen.dart';
 import '../switch_screens.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -85,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SingleChildScrollView(
           child: Center(
             child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Form(
                 key: formValidationKey,
                 child: Column(
@@ -187,7 +186,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     //login button
                     isSigning
-                        ? CustomLoadingBar()
+                        ? const CustomLoadingBar()
                         : AuthButton(
                             ontap: signUpUser,
                             btntext: "Sign in",
