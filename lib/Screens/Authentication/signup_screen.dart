@@ -189,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ? const CustomLoadingBar()
                         : AuthButton(
                             ontap: signUpUser,
-                            btntext: "Sign in",
+                            btntext: "Sign Up",
                           ),
                   ],
                 ),
