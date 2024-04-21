@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moodtracker/widgets/back_button.dart';
+import 'package:moodtracker/widgets/toast.dart';
 import '../../widgets/Authbutton.dart';
 import '../../widgets/authTextfield.dart';
 
@@ -14,7 +16,20 @@ class ForgetPass extends StatefulWidget {
 class _ForgetPassState extends State<ForgetPass> {
   final TextEditingController emailController = TextEditingController();
 
-  void resetpassword() {}
+  void resetPassword() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text.trim(),
+      );
+      showToast(messege: "Password reset email sent successfully");
+      // You can show a message to the user indicating that the email has been sent
+      Navigator.of(context).pop;
+    } catch (e) {
+      // Handle errors such as invalid email, user not found, etc.
+      showToast(messege: "Error sending password reset email: $e");
+      // You can show an error message to the user
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +66,7 @@ class _ForgetPassState extends State<ForgetPass> {
                     const SizedBox(height: 25,),
                     // Login button
                     AuthButton(
-                      ontap: resetpassword, btntext: "Reset Password",),
+                      ontap: resetPassword, btntext: "Reset Password",),
                     const SizedBox(height: 25,),
                   ],
                 ),
