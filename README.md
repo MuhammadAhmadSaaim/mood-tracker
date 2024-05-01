@@ -1,16 +1,6 @@
 # moodtracker
 
-A new Flutter project.
+An app that helps students track their mood daily. Using AI modules, it generates weekly and monthly reports by analysisng each day's data to give suggestions to improve mood of the student.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![2](https://github.com/MuhammadAhmadSaaim/mood-tracker/assets/131032658/82f4c8d2-8d63-41d6-81d3-069e5fbee365)
+![1](https://github.com/MuhammadAhmadSaaim/mood-tracker/assets/131032658/3ea26542-4d8d-46fc-a9f9-8a85eb586235)
